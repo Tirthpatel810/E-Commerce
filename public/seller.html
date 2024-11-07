@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="ecommApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Dashboard</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="angular.js"></script>
+</head>
+<body ng-controller="sellerCtrl">
+
+    <!-- Add Product Form -->
+    <div>
+        <h2>Add New Product</h2>
+        <form ng-submit="addProduct()">
+            <input type="text" ng-model="newProduct.productName" placeholder="Product Name" required>
+            <input type="number" ng-model="newProduct.quantity" placeholder="Quantity" required>
+            <input type="number" ng-model="newProduct.price" placeholder="Price" required>
+            <textarea ng-model="newProduct.description" placeholder="Description"></textarea>
+            <input type="text" ng-model="newProduct.image" placeholder="Image URL">
+            <button type="submit">Add Product</button>
+        </form>
+    </div>
+
+    <!-- Product List with Edit/Delete -->
+    <div>
+        <h2>Your Products</h2>
+        <input type="text" ng-model="searchText" placeholder="Search Products">
+        <table>
+            <tr>
+                <th>Product Name</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+            <tr ng-repeat="product in products | filter:searchText">
+                <td>{{ product.productName }}</td>
+                <td>{{ product.quantity }}</td>
+                <td>{{ product.price }}</td>
+                <td>
+                    <button ng-click="editProduct(product)">Edit</button>
+                    <button ng-click="deleteProduct(product._id)">Delete</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Product Sales -->
+    <div>
+        <h2>Products Sold</h2>
+        <ul>
+            <li ng-repeat="product in products | filter:{ totalSold: '!0' }">
+                {{ product.productName }} - {{ product.totalSold }} sold
+            </li>
+        </ul>
+    </div>
+
+    <!-- Logout -->
+    <button ng-click="logout()">Logout</button>
+
+</body>
+</html>

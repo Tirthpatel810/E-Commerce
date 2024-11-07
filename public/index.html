@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="ecommApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-commerce Homepage</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="angular.js"></script>
+    <link rel="stylesheet" href="styles_index.css">
+</head>
+<body ng-controller="indexCtrl">
+    <!-- Header Section -->
+    <header>
+        <h1>Welcome to Our E-commerce Platform</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#products">Products</a></li>
+                <li><a href="#contact">Contact Us</a></li>
+                <li ng-if="!loggedin"><button class="logout"><a href="login.html">Login</a></button></li>
+                <li ng-if="loggedin"><button ng-click="confirmLogout()" class="logout">Logout</button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h2>Your One-Stop Shop for All Your Needs!</h2>
+        <p>Discover a wide range of products at unbeatable prices.</p>
+        <a href="login.html" class="button">Shop Now</a>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="content-section">
+        <h2>About Us</h2>
+        <p>We are committed to providing the best products and services to our customers. Explore our collection of high-quality products, carefully curated just for you!</p>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="content-section">
+        <h2>Our Products</h2>
+        <p>Check out our popular products!</p>
+        <div class="product-gallery">
+            <!-- Product Items (Placeholder) -->
+            <div class="product-item">
+                <h3>Product 1</h3>
+                <p>Description of Product 1</p>
+            </div>
+            <div class="product-item">
+                <h3>Product 2</h3>
+                <p>Description of Product 2</p>
+            </div>
+            <div class="product-item">
+                <h3>Product 3</h3>
+                <p>Description of Product 3</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="content-section">
+        <h2>Contact Us</h2>
+        <p>Have questions? Feel free to reach out to us!</p>
+        <a href="mailto:support@ecommerce.com" class="button">Email Us</a>
+    </section>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>&copy; 2024 E-commerce Platform. All rights reserved.</p>
+    </footer>
+</body>
+</html>

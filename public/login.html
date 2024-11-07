@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="ecommApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-commerce Login & Registration</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <script src="angular.js"></script>
+</head>
+<body ng-controller="ecommCtrl">
+    <div class="form-container">
+
+        <!-- Login Form -->
+        <div class="form-section" ng-show="currentForm === 'login'">
+            <h2>Login</h2>
+            <form ng-submit="login()">
+                <label for="login-username">Username:</label>
+                <input type="text" id="login-username" ng-model="loginUser.username" required />
+                
+                <label for="login-password">Password:</label>
+                <input type="password" id="login-password" ng-model="loginUser.password" required />
+                
+                <button type="submit">Login</button>
+                <button ng-click="showForm('register')" class="button-login">Don't have account Register</button>
+                <p ng-if="errorMessage" class="error">{{ errorMessage }}</p>
+            </form>
+        </div>
+        <!-- Registration Form -->
+        <div class="form-section" ng-show="currentForm === 'register'">
+            <h2>Register</h2>
+            <form ng-submit="register()">
+                <label for="reg-username">Username:</label>
+                <input type="text" id="reg-username" ng-model="registerUser.username" required />
+                
+                <label for="reg-email">Email:</label>
+                <input type="email" id="reg-email" ng-model="registerUser.email" required />
+                
+                <label for="reg-phone">Mobile Number:</label>
+                <input type="tel" id="reg-phone" ng-model="registerUser.phone" required />
+                
+                <label for="reg-address">Address:</label>
+                <input type="text" id="reg-address" ng-model="registerUser.address" required />
+
+                <label for="reg-role">Role:</label>
+                <select id="reg-role" ng-model="registerUser.role" required>
+                    <option value="">Select Role</option>
+                    <option value="seller">Seller</option>
+                    <option value="user">Customer</option>
+                </select>
+                
+                <label for="reg-password">Password:</label>
+                <input type="password" id="reg-password" ng-model="registerUser.password" required />
+                
+                <label for="reg-confirm-password">Confirm Password:</label>
+                <input type="password" id="reg-confirm-password" ng-model="registerUser.confirmPassword" required />
+                
+                <button type="submit">Register</button>
+                <button ng-click="showForm('login')" class="button-login">Already have account Login</button>
+                <p ng-if="registrationMessage" class="success">{{ registrationMessage }}</p>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
