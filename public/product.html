@@ -36,7 +36,7 @@
 
     <div class="product-grid">
         <div class="product-card" ng-repeat="product in products | filter:searchText | orderBy:sortOrder">
-            <img ng-src="{{product.image}}" alt="{{product.productName}}" class="product-image">
+            <img ng-src="images/{{product.image}}" alt="{{product.productName}}" class="product-image">
             <div class="product-info">
                 <h3>{{product.productName}}</h3>
                 <p class="category">{{product.category}}</p>
