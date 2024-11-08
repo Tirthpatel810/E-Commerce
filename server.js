@@ -121,6 +121,51 @@ app.get('/api/popular-products', async (req, res) => {
     }
 });
 
+app.get('/api/getproducts', async (req, res) => {
+    try {
+        const products = await Product.find();
+        res.json(products);
+    } catch (error) {
+        res.status(500).send('Error fetching products');
+    }
+});
+
+const Cart = require('./models/cart');
+app.post('/api/saveCart', async (req, res) => {
+    try {
+        const { cart } = req.body;
+        const userId = cart[0].userId;  // Get the userId from cart data
+        let existingCart = await Cart.findOne({ userId });
+
+        if (existingCart) {
+            existingCart.items = cart.map(item => ({
+                productId: item.productId,
+                productName: item.productName,
+                price: item.price,
+                quantity: item.quantity,
+                total: item.total,
+            }));
+            await existingCart.save();
+        } else {
+            const newCart = new Cart({
+                userId,
+                items: cart.map(item => ({
+                    productId: item.productId,
+                    productName: item.productName,
+                    price: item.price,
+                    quantity: item.quantity,
+                    total: item.total,
+                })),
+            });
+            await newCart.save();
+        }
+        res.status(200).json({ message: 'Cart saved successfully' });
+    } catch (error) {
+        console.error("Error saving cart:", error);
+        res.status(500).json({ message: 'Error saving cart' });
+    }
+});
+
 app.listen(3000, () => {
     console.log('Server running on http://localhost:3000');
 });

@@ -53,36 +53,6 @@ app.controller('ecommCtrl', function($scope, $http) {
     };
 });
 
-app.controller('ProductController', function($scope) {
-    $scope.products = [
-    { id: 1, name: 'Product 1', price: 100, description: 'Description of product 1' },
-    { id: 2, name: 'Product 2', price: 200, description: 'Description of product 2' }
-    ];
-
-    $scope.addToCart = function(product) {
-    alert(`${product.name} added to cart!`);
-    };
-    });
-
-    app.controller('AdminController', function($scope) {
-    $scope.products = [
-    { id: 1, name: 'Product 1', price: 100, description: 'Description of product 1' },
-    { id: 2, name: 'Product 2', price: 200, description: 'Description of product 2' }
-    ];
-
-    $scope.newProduct = { name: '', price: '', description: '' };
-
-    $scope.addProduct = function() {
-    const newProduct = { ...$scope.newProduct, id: Date.now() };
-    $scope.products.push(newProduct);
-    $scope.newProduct = { name: '', price: '', description: '' };
-    };
-
-    $scope.deleteProduct = function(id) {
-    $scope.products = $scope.products.filter(product => product.id !== id);
-};
-});
-
 app.controller('indexCtrl',function($scope,$http){
     $scope.currentUser = {};
     $scope.loggedin = false;
@@ -205,4 +175,70 @@ app.controller('sellerCtrl', function($scope, $http) {
 
     // Load products on initialization
     $scope.loadProducts();
+});
+
+app.controller('productCtrl', function ($scope, $http) {
+    $scope.products = [];
+    $scope.cart = [];
+    $scope.currentUser = {};
+
+    $scope.logout = function() {
+        sessionStorage.removeItem('user');
+        sessionStorage.clear();
+        window.location.href = 'index.html';
+        $scope.loggedin = false;
+        $scope.currentUser = {};
+    }
+    $scope.confirmLogout = function() {
+        if (confirm("Are you sure you want to log out?")) {
+          $scope.logout();
+        }
+    };
+
+    // Fetch products from the API
+    $http.get('/api/getproducts').then(response => {
+        $scope.products = response.data;
+    }).catch(error => console.error("Error fetching products:", error));
+
+    // Add product to the cart
+    $scope.addToCart = function (product) {
+        let existingProduct = $scope.cart.find(item => item._id === product._id);
+    
+        try {
+            const storedData = sessionStorage.getItem('currentUser');
+            if (storedData) {
+                const user = JSON.parse(storedData);
+                $scope.currentUser = user.user;
+                $scope.loggedin = true;
+            } else {
+                alert("Login Required");
+                window.location.href = 'login.html';
+                return;
+            }
+        } catch {
+            $scope.currentUser = {};
+        }
+    
+        if (existingProduct) {
+            existingProduct.quantity += 1;
+            existingProduct.total = existingProduct.quantity * existingProduct.price;
+        } else {
+            product.userId = $scope.currentUser._id;
+            product.productId = product._id;
+            product.username = $scope.currentUser.username;
+            product.quantity = 1;
+            product.total = product.price;
+            $scope.cart.push(product);
+        }
+    
+        console.log("Added to cart:", product.productName);
+    
+        $http.post('/api/saveCart/', { cart: $scope.cart })
+            .then(response => {
+                console.log("Cart saved successfully", response.data);
+            })
+            .catch(error => {
+                console.error("Error saving cart:", error);
+            });
+    };
 });
