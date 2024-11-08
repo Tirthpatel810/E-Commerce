@@ -32,28 +32,54 @@
     </section>
 
     <!-- About Section -->
-    <section id="about" class="content-section">
-        <h2>About Us</h2>
-        <p>We are committed to providing the best products and services to our customers. Explore our collection of high-quality products, carefully curated just for you!</p>
-    </section>
+    <div class="about-us">
+        <h1>About Us</h1>
+        <p>
+            Welcome to our e-commerce platform! We are dedicated to providing quality products that meet your needs and expectations. Our team is passionate about making online shopping convenient and enjoyable, offering a wide variety of products at competitive prices. We focus on ensuring a seamless experience, from browsing our collection to receiving your orders.
+        </p>
+        <p>
+            We started this platform with a mission to connect people with great products and provide a reliable shopping destination. Our team works tirelessly to source, test, and bring the best products to our store, so you can shop with confidence and peace of mind.
+        </p>
+        
+        <h2>Our Team</h2>
+        <div class="team-members">
+            <div class="team-member">
+                <h3>Vanshil Sheth</h3>
+                <p>Role: CEO & Founder</p>
+                <p>Bio: Passionate about innovation and committed to delivering value to our customers.</p>
+            </div>
+            <div class="team-member">
+                <h3>Ravi Tank</h3>
+                <p>Role: Head of Operations</p>
+                <p>Bio: Ensures smooth daily operations and oversees product quality.</p>
+            </div>
+            <div class="team-member">
+                <h3>Tirth Patel</h3>
+                <p>Role: Lead Developer</p>
+                <p>Bio: Responsible for platform development and a seamless user experience.</p>
+            </div>
+            <div class="team-member">
+                <h3>Tejas Prajapati</h3>
+                <p>Role: Marketing Specialist</p>
+                <p>Bio: Develops our marketing strategy and manages brand communications.</p>
+            </div>
+            <div class="team-member">
+                <h3>Raj Pipaliya</h3>
+                <p>Role: Customer Support</p>
+                <p>Bio: Dedicated to providing excellent customer service and support.</p>
+            </div>
+        </div>
+    </div>
 
-    <!-- Products Section -->
+    <!-- Popular Products Section -->
     <section id="products" class="content-section">
-        <h2>Our Products</h2>
-        <p>Check out our popular products!</p>
-        <div class="product-gallery">
-            <!-- Product Items (Placeholder) -->
-            <div class="product-item">
-                <h3>Product 1</h3>
-                <p>Description of Product 1</p>
-            </div>
-            <div class="product-item">
-                <h3>Product 2</h3>
-                <p>Description of Product 2</p>
-            </div>
-            <div class="product-item">
-                <h3>Product 3</h3>
-                <p>Description of Product 3</p>
+        <div class="popular-products">
+            <h2>Check Out Our Popular Products!</h2>
+            <div ng-repeat="product in popularProducts">
+                <img ng-src="{{product.image}}" alt="{{product.productName}}">
+                <h3>{{ product.productName }}</h3>
+                <p>{{ product.description }}</p>
+                <p>Price: ${{ product.price }}</p>
             </div>
         </div>
     </section>
@@ -62,7 +88,7 @@
     <section id="contact" class="content-section">
         <h2>Contact Us</h2>
         <p>Have questions? Feel free to reach out to us!</p>
-        <a href="mailto:support@ecommerce.com" class="button">Email Us</a>
+        <a href="mailto:pateltirth2833@gmail.com" class="button">Email Us</a>
     </section>
 
     <!-- Footer Section -->

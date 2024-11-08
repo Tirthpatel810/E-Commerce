@@ -109,7 +109,9 @@ th {
 }
 td button {
     border: none;
+    width: 100px;
     padding: 8px 12px;
+    margin-top: 4px;
     border-radius: 5px;
     color: #fff;
     cursor: pointer;

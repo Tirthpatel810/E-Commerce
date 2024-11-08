@@ -9,7 +9,8 @@ const productSchema = new mongoose.Schema({
     description: String,
     image: String,
     sellerName: String,
-    totalSold: { type: Number, default: 0 }, // New field to track items sold
+    totalSold: { type: Number, default: 0 },
+    category: { type: String, required: true }
 });
 
 const Product = mongoose.model('Product', productSchema);

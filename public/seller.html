@@ -35,6 +35,16 @@
                 <input type="number" ng-model="newProduct.price" placeholder="Price" required>
                 <textarea ng-model="newProduct.description" placeholder="Description" rows="5"></textarea>
                 <input type="text" ng-model="newProduct.image" placeholder="Image URL">
+
+                <select ng-model="newProduct.category" required>
+                    <option value="" disabled selected>Select Category</option>
+                    <option value="glosary">Glosary</option>
+                    <option value="electronic">Electronic</option>
+                    <option value="cloths">Cloths</option>
+                    <option value="showpiece">Showpiece</option>
+                    <option value="other">Other</option>
+                </select>
+
                 <button ng-if="!updateMode" ng-click="addProduct()">Add Product</button>
                 <button ng-if="updateMode" ng-click="updateProduct()">Update Product</button>
             </form>
@@ -52,6 +62,7 @@
                         <th>Price</th>
                         <th>Description</th>
                         <th>Total Sold</th>
+                        <th>Category</th>
                         <th>Added Date</th>
                         <th>Last Updated Date</th>
                         <th>Image</th>
@@ -63,6 +74,7 @@
                         <td>{{ product.price }}</td>
                         <td>{{ product.description }}</td>
                         <td>{{ product.totalSold }}</td>
+                        <td>{{ product.category }}</td>
                         <td>{{ product.addedDate | date: 'dd-MM-yyyy HH:mm' }}</td>
                         <td>{{ product.lastUpdatedDate | date: 'dd-MM-yyyy HH:mm' }}</td>
                         <td>{{ product.image }}</td>

@@ -83,9 +83,11 @@ app.controller('ProductController', function($scope) {
 };
 });
 
-app.controller('indexCtrl',function($scope){
+app.controller('indexCtrl',function($scope,$http){
     $scope.currentUser = {};
     $scope.loggedin = false;
+    $scope.popularProducts = [];
+
     $scope.logout = function() {
         sessionStorage.removeItem('user');
         sessionStorage.clear();
@@ -113,6 +115,11 @@ app.controller('indexCtrl',function($scope){
     catch{
         $scope.currentUser = {};
     }
+
+    $http.get('/api/popular-products')
+        .then(response => {
+            $scope.popularProducts = response.data;
+        }).catch(error => console.error('Error fetching popular products:', error));
 });
 
 app.controller('sellerCtrl', function($scope, $http) {

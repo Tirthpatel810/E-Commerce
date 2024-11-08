@@ -111,6 +111,15 @@ app.delete('/api/products/:id', async (req, res) => {
     }
 });
 
+app.get('/api/popular-products', async (req, res) => {
+    try {
+        const topProducts = await Product.find().sort({ totalSold: -1 }).limit(3);
+        res.json(topProducts);
+    } catch (error) {
+        console.error('Error fetching popular products:', error);
+        res.status(500).send('Error fetching popular products');
+    }
+});
 
 app.listen(3000, () => {
     console.log('Server running on http://localhost:3000');
