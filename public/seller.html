@@ -90,6 +90,7 @@
         <!-- Product Sales -->
         <section class="sales-section" ng-if="soldProductView==true">
             <h2>Products Sold</h2>
+            <p>No Product sold yet.</p>
             <ul>
                 <li ng-repeat="product in products | filter:{ totalSold: '!0' }">
                     {{ product.productName }} - {{ product.totalSold }} sold

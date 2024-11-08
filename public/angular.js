@@ -234,7 +234,7 @@ app.controller('productCtrl', function ($scope, $http) {
     
         console.log("Added to cart:", product.productName);
     
-        $http.post('/api/saveCart/', { cart: $scope.cart })
+        $http.post('/api/saveCart/', { cart: $scope.cart , userId: $scope.currentUser._id})
             .then(response => {
                 console.log("Cart saved successfully", response.data);
             })
@@ -308,5 +308,74 @@ app.controller('productCtrl', function ($scope, $http) {
             });
         }
     };
+
+    $scope.checkout = function(paymentMethod) {
+        if ($scope.cart.length === 0) {
+            alert("Your cart is empty!");
+            return;
+        }
+    
+        // Prepare the order data
+        const orderData = {
+            userId: $scope.currentUser._id,
+            cart: $scope.cart,
+            paymentMethod: paymentMethod
+        };
+    
+        // Call the checkout API
+        $http.post('/api/checkout', orderData)
+            .then(response => {
+                if (paymentMethod === 'razorpay') {
+                    // Handle Razorpay Payment
+                    initiateRazorpayPayment(response.data);
+                } else {
+                    alert('Order placed successfully with Cash on Delivery!');
+                    // Redirect or update UI as necessary
+                }
+            })
+            .catch(error => {
+                console.error("Error during checkout:", error);
+                alert("An error occurred while placing your order.");
+            });
+    };
+    
+    // Function to initiate Razorpay payment
+    function initiateRazorpayPayment(orderData) {
+        var options = {
+            key: RAZORPAY_KEY_ID, // Razorpay Key ID
+            amount: orderData.amount, // Amount in paise
+            currency: 'INR',
+            name: 'Your Shop Name',
+            description: 'Order Payment',
+            order_id: orderData.orderId, // The Razorpay order ID
+            handler: function(response) {
+                // After successful payment
+                updateOrderStatus(response.razorpay_payment_id);
+            },
+            prefill: {
+                name: $scope.currentUser.username,
+                email: $scope.currentUser.email,
+            },
+            theme: {
+                color: '#F37254'
+            }
+        };
+    
+        var rzp1 = new Razorpay(options);
+        rzp1.open();
+    }
+    
+    // Function to update order status after successful payment
+    function updateOrderStatus(paymentId) {
+        $http.put('/api/updateOrder', { paymentId: paymentId })
+            .then(response => {
+                alert('Payment successful. Your order is being processed.');
+                // Update UI or redirect as needed
+            })
+            .catch(error => {
+                console.error("Error updating order status:", error);
+                alert('Error processing payment.');
+            });
+    }
 
 });

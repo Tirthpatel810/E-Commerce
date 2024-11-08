@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Cart</title>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <link rel="stylesheet" href="styles_cart.css">
     <script src="angular.js"></script>
 </head>
@@ -51,11 +52,12 @@
                 </tbody>
             </table>
             <div class="cart-total">
-                <h3>Total: {{ calculateCartTotal() | currency }}</h3>
+                <h3>Total: ₹{{ calculateCartTotal() }}</h3>
             </div>
         </div>
-        <div ng-if="cart.length === 0" class="empty-cart">
-            <p>Your cart is empty.</p>
+        <div class="cart-total">
+            <h3>Total: ₹{{ calculateCartTotal() }}</h3>
+            <button ng-click="checkout('cod')">Cash on Delivery</button>
         </div>
     </div>
 </body>

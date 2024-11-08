@@ -180,6 +180,45 @@ app.get('/api/getCart/:userId', async (req, res) => {
         res.status(500).json({ message: 'Error fetching cart data' });
     }
 });
+
+const Order = require('./models/order');
+
+// Checkout route
+app.post('/api/checkout', async (req, res) => {
+  const { userId, cart, paymentMethod } = req.body;
+  
+  try {
+    let totalAmount = cart.reduce((sum, item) => sum + item.total, 0);
+
+    if (paymentMethod === 'cod') {
+      // For Cash on Delivery, save the order directly
+      const order = new Order({
+        userId,
+        cart,
+        totalAmount,
+        paymentMethod: 'COD',
+        paymentStatus: 'Pending',
+      });
+
+      await order.save();
+
+      // Update product quantities
+      for (let item of cart) {
+        const product = await Product.findById(item.productId);
+        product.quantity -= item.quantity;
+        await product.save();
+      }
+
+      res.json({ success: true, message: 'Order placed successfully' });
+    } else {
+      res.status(400).send('Invalid payment method');
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error processing order');
+  }
+});
+
 app.listen(3000, () => {
     console.log('Server running on http://localhost:3000');
 });
