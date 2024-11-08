@@ -78,6 +78,8 @@ nav ul li a:hover {
 }
 .logout:hover {
     text-decoration: underline;
+    height: 28px;
+    width: 61px;
 }
 
 /* Content Sections */

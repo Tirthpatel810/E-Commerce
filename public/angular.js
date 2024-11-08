@@ -98,6 +98,7 @@ app.controller('indexCtrl',function($scope){
           $scope.logout();
         }
     };
+    
     try{
         const storedData = sessionStorage.getItem('currentUser');
         if (storedData) {
@@ -118,6 +119,16 @@ app.controller('sellerCtrl', function($scope, $http) {
     $scope.currentUser = JSON.parse(sessionStorage.getItem('currentUser')) || {};
     $scope.products = [];
     $scope.newProduct = {};
+    $scope.updateMode = false;
+    $scope.addProductView = false;
+    $scope.viewProductView = false;
+    $scope.soldProductView = false;
+
+    $scope.confirmAction = function(productId) {
+        if (confirm("Are you sure you want Delete Product?")) {
+            $scope.deleteProduct(productId);
+        }
+    };
 
     // Load seller's products
     $scope.loadProducts = function() {
@@ -134,13 +145,16 @@ app.controller('sellerCtrl', function($scope, $http) {
         $http.post('/api/products', productData)
             .then(response => {
                 $scope.products.push(response.data);
-                $scope.newProduct = {}; // Reset form
+                $scope.newProduct = {};
+                alert("Product added successfully");
             })
             .catch(error => console.error('Error adding product:', error));
     };
 
     // Edit existing product
     $scope.editProduct = function(product) {
+        $scope.updateMode = true;
+        $scope.addProductView = true;
         $scope.newProduct = angular.copy(product);
     };
 
@@ -150,24 +164,36 @@ app.controller('sellerCtrl', function($scope, $http) {
             .then(response => {
                 const index = $scope.products.findIndex(p => p._id === $scope.newProduct._id);
                 $scope.products[index] = response.data;
-                $scope.newProduct = {}; // Reset form
+                $scope.newProduct = {};
+                $scope.updateMode = false;
+                $scope.addProductView = false;
+                alert("Product updated successfully");
             })
             .catch(error => console.error('Error updating product:', error));
     };
 
     // Delete product
-    $scope.deleteProduct = function(productid) {
+    $scope.deleteProduct = function(_id) {
         $http.delete(`/api/products/${_id}`)
             .then(() => {
                 $scope.products = $scope.products.filter(p => p._id !== _id);
+                alert("Product deleted successfully");
             })
             .catch(error => console.error('Error deleting product:', error));
     };
 
     // Logout function
     $scope.logout = function() {
-        sessionStorage.removeItem('currentUser');
+        sessionStorage.removeItem('user');
+        sessionStorage.clear();
         window.location.href = 'index.html';
+        $scope.loggedin = false;
+        $scope.currentUser = {};
+    };
+    $scope.confirmLogout = function() {
+        if (confirm("Are you sure you want to log out?")) {
+          $scope.logout();
+        }
     };
 
     // Load products on initialization

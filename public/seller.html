@@ -6,57 +6,85 @@
     <title>Seller Dashboard</title>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
     <script src="angular.js"></script>
+    <link rel="stylesheet" href="styles_seller.css">
 </head>
 <body ng-controller="sellerCtrl">
 
-    <!-- Add Product Form -->
-    <div>
-        <h2>Add New Product</h2>
-        <form ng-submit="addProduct()">
-            <input type="text" ng-model="newProduct.productName" placeholder="Product Name" required>
-            <input type="number" ng-model="newProduct.quantity" placeholder="Quantity" required>
-            <input type="number" ng-model="newProduct.price" placeholder="Price" required>
-            <textarea ng-model="newProduct.description" placeholder="Description"></textarea>
-            <input type="text" ng-model="newProduct.image" placeholder="Image URL">
-            <button type="submit">Add Product</button>
-        </form>
-    </div>
+    <!-- Sidebar for Navigation -->
+    <aside class="sidebar">
+        <h1>Seller Dashboard</h1>
+        <button ng-click="addProductView=true; viewProductView=false; soldProductView=false">Add Product</button>
+        <button ng-click="viewProductView=true; addProductView=false; soldProductView=false">View Products</button>
+        <button ng-click="soldProductView=true; addProductView=false; viewProductView=false">Sold Products</button>
+        <button ng-click="confirmLogout()">Logout</button>
+    </aside>    
 
-    <!-- Product List with Edit/Delete -->
-    <div>
-        <h2>Your Products</h2>
-        <input type="text" ng-model="searchText" placeholder="Search Products">
-        <table>
-            <tr>
-                <th>Product Name</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Actions</th>
-            </tr>
-            <tr ng-repeat="product in products | filter:searchText">
-                <td>{{ product.productName }}</td>
-                <td>{{ product.quantity }}</td>
-                <td>{{ product.price }}</td>
-                <td>
-                    <button ng-click="editProduct(product)">Edit</button>
-                    <button ng-click="deleteProduct(product._id)">Delete</button>
-                </td>
-            </tr>
-        </table>
-    </div>
+    <!-- Main Content Area -->
+    <main class="content">
+        <section class="form-section" ng-if="addProductView === false && viewProductView === false && soldProductView === false">
+            <h2>Welcome, {{ currentUser.user.username }} </h2>
+            <p>Thanks for selling your products on over website you can choose options from left.</p>
+        </section>        
+        <!-- Add/Update Product Form -->
+        <section class="form-section" ng-if="addProductView==true">
+            <h2 ng-if="!updateMode">Add New Product</h2>
+            <h2 ng-if="updateMode">Update Product</h2>
+            <form>
+                <input type="text" ng-model="newProduct.productName" placeholder="Product Name" required>
+                <input type="number" ng-model="newProduct.quantity" placeholder="Quantity" required>
+                <input type="number" ng-model="newProduct.price" placeholder="Price" required>
+                <textarea ng-model="newProduct.description" placeholder="Description" rows="5"></textarea>
+                <input type="text" ng-model="newProduct.image" placeholder="Image URL">
+                <button ng-if="!updateMode" ng-click="addProduct()">Add Product</button>
+                <button ng-if="updateMode" ng-click="updateProduct()">Update Product</button>
+            </form>
+        </section>
 
-    <!-- Product Sales -->
-    <div>
-        <h2>Products Sold</h2>
-        <ul>
-            <li ng-repeat="product in products | filter:{ totalSold: '!0' }">
-                {{ product.productName }} - {{ product.totalSold }} sold
-            </li>
-        </ul>
-    </div>
+        <!-- Product List with Edit/Delete Actions -->
+        <section class="table-section" ng-if="viewProductView==true">
+            <h2>Your Products</h2>
+            <input type="text" ng-model="searchText" placeholder="Search Products" class="searchbox">
+            <div class="table-container">
+                <table>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Description</th>
+                        <th>Total Sold</th>
+                        <th>Added Date</th>
+                        <th>Last Updated Date</th>
+                        <th>Image</th>
+                        <th>Actions</th>
+                    </tr>
+                    <tr ng-repeat="product in products | filter:searchText">
+                        <td>{{ product.productName }}</td>
+                        <td>{{ product.quantity }}</td>
+                        <td>{{ product.price }}</td>
+                        <td>{{ product.description }}</td>
+                        <td>{{ product.totalSold }}</td>
+                        <td>{{ product.addedDate | date: 'dd-MM-yyyy HH:mm' }}</td>
+                        <td>{{ product.lastUpdatedDate | date: 'dd-MM-yyyy HH:mm' }}</td>
+                        <td>{{ product.image }}</td>
+                        <td>
+                            <button class="edit-btn" ng-click="editProduct(product)">Edit</button>
+                            <button class="delete-btn" ng-click="confirmAction(product._id)">Delete</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </section>
 
-    <!-- Logout -->
-    <button ng-click="logout()">Logout</button>
+        <!-- Product Sales -->
+        <section class="sales-section" ng-if="soldProductView==true">
+            <h2>Products Sold</h2>
+            <ul>
+                <li ng-repeat="product in products | filter:{ totalSold: '!0' }">
+                    {{ product.productName }} - {{ product.totalSold }} sold
+                </li>
+            </ul>
+        </section>
 
+    </main>
 </body>
 </html>
