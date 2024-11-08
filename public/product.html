@@ -41,7 +41,7 @@
                 <h3>{{product.productName}}</h3>
                 <p class="category">{{product.category}}</p>
                 <p>{{product.description | limitTo: 100}}{{product.description.length > 100 ? '...' : ''}}</p>
-                <p class="price">Price: ${{product.price | number:2}}</p>
+                <p class="price">Price: ₹{{product.price | number:2}}</p>
                 <p class="seller">Seller: {{product.sellerName}}</p>
                 <p class="added-date">Added: {{product.addedDate | date:'dd-MM-yyyy'}}</p>
                 <button ng-click="addToCart(product)" class="add-to-cart-btn">Add to Cart</button>
