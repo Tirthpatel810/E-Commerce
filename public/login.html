@@ -10,7 +10,6 @@
 </head>
 <body ng-controller="ecommCtrl">
     <div class="form-container">
-
         <!-- Login Form -->
         <div class="form-section" ng-show="currentForm === 'login'">
             <h2>Login</h2>
@@ -21,11 +20,12 @@
                 <label for="login-password">Password:</label>
                 <input type="password" id="login-password" ng-model="loginUser.password" required />
                 
-                <button type="submit">Login</button>
-                <button ng-click="showForm('register')" class="button-login">Don't have account Register</button>
+                <button type="submit" class="primary-btn">Login</button>
+                <button ng-click="showForm('register')" class="secondary-btn">Don't have an account? Register</button>
                 <p ng-if="errorMessage" class="error">{{ errorMessage }}</p>
             </form>
         </div>
+        
         <!-- Registration Form -->
         <div class="form-section" ng-show="currentForm === 'register'">
             <h2>Register</h2>
@@ -55,8 +55,8 @@
                 <label for="reg-confirm-password">Confirm Password:</label>
                 <input type="password" id="reg-confirm-password" ng-model="registerUser.confirmPassword" required />
                 
-                <button type="submit">Register</button>
-                <button ng-click="showForm('login')" class="button-login">Already have account Login</button>
+                <button type="submit" class="primary-btn">Register</button>
+                <button ng-click="showForm('login')" class="secondary-btn">Already have an account? Login</button>
                 <p ng-if="registrationMessage" class="success">{{ registrationMessage }}</p>
             </form>
         </div>

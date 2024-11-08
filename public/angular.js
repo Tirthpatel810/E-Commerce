@@ -181,6 +181,7 @@ app.controller('productCtrl', function ($scope, $http) {
     $scope.products = [];
     $scope.cart = [];
     $scope.currentUser = {};
+    $scope.loggedin = false;
 
     $scope.logout = function() {
         sessionStorage.removeItem('user');
@@ -247,11 +248,11 @@ app.controller('productCtrl', function ($scope, $http) {
         if (storedData) {
             const user = JSON.parse(storedData);
             const userId = user.user._id;
-    
+            $scope.loggedin = true;
+
             $http.get(`/api/getCart/${userId}`)
                 .then(response => {
                     $scope.cart = response.data;
-                    console.log("Cart data:", $scope.cart);
                 })
                 .catch(error => {
                     console.error("Error fetching cart data:", error);
@@ -261,10 +262,51 @@ app.controller('productCtrl', function ($scope, $http) {
             window.location.href = 'login.html';
         }
     };
+
+    // Calculate total cart value
     $scope.calculateCartTotal = function () {
-        if ($scope.cart && Array.isArray($scope.cart)) {
-            return $scope.cart.reduce((sum, item) => sum + item.total, 0);
-        }
-        return 0;
+        return $scope.cart.reduce((sum, item) => sum + item.total, 0);
     };
+
+    // Increase quantity
+    $scope.increaseQuantity = function (item) {
+        item.quantity += 1;
+        item.total = item.price * item.quantity;
+        $scope.updateCart();
+    };
+
+    // Decrease quantity
+    $scope.decreaseQuantity = function (item) {
+        if (item.quantity > 1) {
+            item.quantity -= 1;
+            item.total = item.price * item.quantity;
+            $scope.updateCart();
+        }
+    };
+
+    // Remove item from cart
+    $scope.removeFromCart = function (item) {
+        const index = $scope.cart.indexOf(item);
+        if (index > -1) {
+            $scope.cart.splice(index, 1);
+            $scope.updateCart();
+        }
+    };
+
+    // Save cart changes to server
+    $scope.updateCart = function () {
+        const storedData = sessionStorage.getItem('currentUser');
+        if (storedData) {
+            const user = JSON.parse(storedData);
+            const userid = user.user._id;
+        $http.post('/api/saveCart/', { cart: $scope.cart, userId: userid})
+            .then(response => {
+                console.log("Cart updated successfully", response.data);
+            })
+            .catch(error => {
+                console.error("Error updating cart:", error);
+            });
+        }
+    };
+
 });

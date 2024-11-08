@@ -134,7 +134,7 @@ const Cart = require('./models/cart');
 app.post('/api/saveCart', async (req, res) => {
     try {
         const { cart } = req.body;
-        const userId = cart[0].userId;
+        const { userId } = req.body;
         let existingCart = await Cart.findOne({ userId });
 
         if (existingCart) {
