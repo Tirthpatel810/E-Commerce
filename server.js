@@ -134,7 +134,7 @@ const Cart = require('./models/cart');
 app.post('/api/saveCart', async (req, res) => {
     try {
         const { cart } = req.body;
-        const userId = cart[0].userId;  // Get the userId from cart data
+        const userId = cart[0].userId;
         let existingCart = await Cart.findOne({ userId });
 
         if (existingCart) {
@@ -165,7 +165,21 @@ app.post('/api/saveCart', async (req, res) => {
         res.status(500).json({ message: 'Error saving cart' });
     }
 });
+app.get('/api/getCart/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const cart = await Cart.findOne({ userId }).populate('items.productId', 'productName price'); // Populate product details if necessary
 
+        if (cart) {
+            res.status(200).json(cart.items);
+        } else {
+            res.status(404).json({ message: 'Cart not found' });
+        }
+    } catch (error) {
+        console.error("Error fetching cart data:", error);
+        res.status(500).json({ message: 'Error fetching cart data' });
+    }
+});
 app.listen(3000, () => {
     console.log('Server running on http://localhost:3000');
 });

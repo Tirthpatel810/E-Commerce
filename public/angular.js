@@ -241,4 +241,30 @@ app.controller('productCtrl', function ($scope, $http) {
                 console.error("Error saving cart:", error);
             });
     };
+
+    $scope.getCart = function () {
+        const storedData = sessionStorage.getItem('currentUser');
+        if (storedData) {
+            const user = JSON.parse(storedData);
+            const userId = user.user._id;
+    
+            $http.get(`/api/getCart/${userId}`)
+                .then(response => {
+                    $scope.cart = response.data;
+                    console.log("Cart data:", $scope.cart);
+                })
+                .catch(error => {
+                    console.error("Error fetching cart data:", error);
+                });
+        } else {
+            alert("Please log in to view your cart.");
+            window.location.href = 'login.html';
+        }
+    };
+    $scope.calculateCartTotal = function () {
+        if ($scope.cart && Array.isArray($scope.cart)) {
+            return $scope.cart.reduce((sum, item) => sum + item.total, 0);
+        }
+        return 0;
+    };
 });
